@@ -8,7 +8,7 @@ Useful Resources:
 * https://dog.ceo/dog-api/documentation/breed
 
 
-Things you may want to cover:
+Language versions:
 
 * Ruby 2.6.6
 
