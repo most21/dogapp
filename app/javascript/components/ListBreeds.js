@@ -1,9 +1,26 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { viewAllBreeds } from '../actions/index';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 
 
 class ListBreeds extends React.Component {
+
+  componentDidMount() {
+    const { viewAllBreeds } = this.props;
+    viewAllBreeds();
+  }
+
+  renderBreeds() {
+    const breedList = this.props.breeds ? Object.keys(this.props.breeds) : [];
+    return breedList.map((breed, index) => (
+      <li key={index}>
+        <Link to={`/breeds/${breed}`}>{breed}</Link>
+      </li>
+    ));
+  }
+
   render() {
     return (
       <div>
@@ -16,9 +33,7 @@ class ListBreeds extends React.Component {
         <img src="https://images.dog.ceo/breeds/terrier-westhighland/n02098286_3462.jpg" />
 
         <ol>
-          <li><Link to="/breeds/scottie">Scottish Terrier</Link></li>
-          <li>Golden Retriever</li>
-          <li>Whippet</li>
+          {this.renderBreeds()}
         </ol>
       </div>
     );
@@ -27,5 +42,11 @@ class ListBreeds extends React.Component {
 } // end MyFavorites
 
 
+function mapStateToProps(state) {
+  const { breeds } = state;
+  return {
+    breeds: breeds.items
+  };
+} // end mapStateToProps
 
-export default ListBreeds;
+export default connect(mapStateToProps, {viewAllBreeds})(ListBreeds);
