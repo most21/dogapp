@@ -5,4 +5,8 @@ Rails.application.routes.draw do
   #root to: redirect('/welcome')
   root to: "welcome#index"
   get 'welcome', to: 'welcome#index'
+
+  namespace :api do
+    resources :favorites
+  end
 end
