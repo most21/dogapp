@@ -1,7 +1,9 @@
-import { getAllBreeds, getBreedPictures, getAllFavorites, addNewFavorite, deleteFavorite } from '../api/index';
+import { getAllBreeds, getSubBreeds, getSubBreedPictures, getBreedPictures, getAllFavorites, addNewFavorite, deleteFavorite } from '../api/index';
 
 // Dog API action types
 export const VIEW_ALL_BREEDS = 'VIEW_ALL_BREEDS';
+export const VIEW_SUB_BREEDS = 'VIEW_SUB_BREEDS';
+export const VIEW_SUB_BREED_PICTURES = 'VIEW_SUB_BREED_PICTURES';
 export const VIEW_BREED_PICTURES = 'VIEW_BREED_PICTURES';
 
 // Favorite action types
@@ -17,8 +19,24 @@ export const viewAllBreeds = () => (dispatch) => {
     type: VIEW_ALL_BREEDS,
   }));
 }
+export const viewSubBreeds = (attr) => (dispatch) => {
+  return getSubBreeds(attr).then(response => dispatch({
+    subBreeds: response.data.message,
+    type: VIEW_SUB_BREEDS,
+  }));
+}
+export const viewSubBreedPictures = (attr) => (dispatch) => {
+  return getSubBreedPictures(attr).then(response => dispatch({
+    breed: attr.breed,
+    subBreed: attr.subBreed,
+    pictures: response.message,
+    type: VIEW_SUB_BREED_PICTURES,
+  }));
+}
 export const viewBreedPictures = (attr) => (dispatch) => {
   return getBreedPictures(attr).then(response => dispatch({
+    breed: attr.breed,
+    subBreed: null,
     pictures: response.message,
     type: VIEW_BREED_PICTURES,
   }));

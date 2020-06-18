@@ -1,13 +1,17 @@
 import { createStore, combineReducers } from 'redux';
 //import { reducer as formReducer } from 'redux-form';
-import { VIEW_ALL_BREEDS, VIEW_BREED_PICTURES, VIEW_ALL_FAVORITES, ADD_FAVORITE, DELETE_FAVORITE } from '../actions/index';
+import { VIEW_ALL_BREEDS, VIEW_SUB_BREEDS, VIEW_SUB_BREED_PICTURES, VIEW_BREED_PICTURES, VIEW_ALL_FAVORITES, ADD_FAVORITE, DELETE_FAVORITE } from '../actions/index';
 
 
 const initialState = {
   breeds: {},
+  subBreeds: {},
   pictures: [],
   favorites: [],
-  visibleBreed: {},
+  visibleBreed: {
+    breed: null,
+    subBreed: null,
+  },
 }
 
 
@@ -23,9 +27,26 @@ function breeds(state = {}, action) {
   }
 }
 
+function subBreeds(state = {}, action) {
+  switch (action.type) {
+    case VIEW_SUB_BREEDS:
+      return {
+        ...state,
+        items: action.sub_breeds
+      }
+    default:
+      return state
+  }
+}
+
 function pictures(state = [], action) {
   switch (action.type) {
     case VIEW_BREED_PICTURES:
+      return {
+        ...state,
+        items: action.pictures,
+      }
+    case VIEW_SUB_BREED_PICTURES:
       return {
         ...state,
         items: action.pictures,
@@ -57,12 +78,21 @@ function favorites(state = [], action) {
   }
 }
 
-function visibleBreed(state = {}, action) {
+function visibleBreed(state = {breed: null, subBreed: null}, action) {
   switch (action.type) {
     case VIEW_BREED_PICTURES:
       return {
         ...state,
+        breed: action.breed,
+        subBreed: action.subBreed,
         items: action.pictures
+      }
+    case VIEW_SUB_BREED_PICTURES:
+      return {
+        ...state,
+        breed: action.breed,
+        subBreed: action.subBreed,
+        items: action.pictures,
       }
     default:
       return state
@@ -79,6 +109,7 @@ function visibleBreed(state = {}, action) {
 
 const rootReducer = combineReducers({
   breeds,
+  subBreeds,
   pictures,
   favorites,
   visibleBreed,
