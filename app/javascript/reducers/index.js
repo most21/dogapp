@@ -32,7 +32,7 @@ function subBreeds(state = {}, action) {
     case VIEW_SUB_BREEDS:
       return {
         ...state,
-        items: action.sub_breeds
+        items: action.subBreeds
       }
     default:
       return state

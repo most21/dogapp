@@ -59,6 +59,7 @@ class CustomDropdown extends React.Component {
     return breedList.map((breed, index) => (
       <Dropdown.Item key={index} eventKey={index} as={Link} to={`/breeds/${breed}`}>{breed}</Dropdown.Item>
     ));
+
   } // renderDropdownItems
 
   render() {
