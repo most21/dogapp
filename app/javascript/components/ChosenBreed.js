@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { viewSubBreeds } from '../actions/index';
-import CustomDropdown from './CustomDropdown';
+import { viewSubBreeds, viewBreedPictures } from '../actions/index';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Form from 'react-bootstrap/Form';
-
+import Image from 'react-bootstrap/Image';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 class ChosenBreed extends React.Component {
   constructor(props) {
@@ -17,8 +19,9 @@ class ChosenBreed extends React.Component {
   }
 
   componentDidMount() {
-    const { viewSubBreeds } = this.props;
+    const { viewSubBreeds, viewBreedPictures } = this.props;
     viewSubBreeds({breed: this.props.match.params.breed});
+    viewBreedPictures({breed: this.props.match.params.breed});
   } // end componentDidMount
 
   renderSubBreeds() {
@@ -32,6 +35,41 @@ class ChosenBreed extends React.Component {
     }
   }
 
+  renderPictures() {
+    const pictureList = this.props.pictures.items ? this.props.pictures.items : [];
+    return pictureList.map((picture, index) => (
+      <Col>
+        <Image src={picture} thumbnail fluid />
+      </Col>
+    ));
+  }
+
+  renderRows() {
+    const pictureList = this.renderPictures()
+    let pictureGrid = [];
+    let row = [];
+    const remainder = pictureList.length % 5;
+    const stop = pictureList.length - remainder;
+    for (let i = 0; i < stop; i++) {
+      if (row.length < 5) {
+        row.push(pictureList[i]);
+      } else {
+        pictureGrid.push(row);
+        row = [];
+      }
+    }
+    row = []
+    for (let j = stop; j < pictureList.length; j++) {
+      row.push(pictureList[j])
+    }
+    pictureGrid.push(row);
+    console.log(pictureGrid);
+    return pictureGrid.map((row) => (
+      <Row>{row}</Row>
+    ));
+  }
+
+  // <img src="https://images.dog.ceo/breeds/whippet/n02091134_13244.jpg" />
   render() {
     const { breed } = this.props.match.params;
     const subBreedsList = this.props.subBreeds ? this.props.subBreeds : [];
@@ -54,7 +92,9 @@ class ChosenBreed extends React.Component {
           </Form.Group>
         </Form>
 
-        <img src="https://images.dog.ceo/breeds/whippet/n02091134_13244.jpg" />
+        <Container>
+          {this.renderRows()}
+        </Container>
       </div>
     );
   } // end render
@@ -63,11 +103,17 @@ class ChosenBreed extends React.Component {
 
 
 function mapStateToProps(state) {
-  const { subBreeds } = state;
-  const { subBreedsList } = subBreeds.items ? subBreeds.items.unshift('All') : [];
+  console.log(state);
+  const { subBreeds, pictures } = state;
+  const pictureList = pictures ? pictures : [];
+  let subBreedsList = subBreeds.items ? subBreeds.items : [];
+  if (subBreedsList.length !== 0) {
+    subBreedsList.unshift('All');
+  }
   return {
-    subBreeds: subBreedsList
+    subBreeds: subBreedsList,
+    pictures: pictureList
   };
 } // end mapStateToProps
 
-export default connect(mapStateToProps, {viewSubBreeds})(ChosenBreed);
+export default connect(mapStateToProps, {viewSubBreeds, viewBreedPictures})(ChosenBreed);

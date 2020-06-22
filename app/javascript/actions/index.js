@@ -34,10 +34,11 @@ export const viewSubBreedPictures = (attr) => (dispatch) => {
   }));
 }
 export const viewBreedPictures = (attr) => (dispatch) => {
+  console.log('in here');
   return getBreedPictures(attr).then(response => dispatch({
     breed: attr.breed,
     subBreed: null,
-    pictures: response.message,
+    pictures: response.data.message,
     type: VIEW_BREED_PICTURES,
   }));
 }
